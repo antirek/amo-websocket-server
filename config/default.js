@@ -1,5 +1,8 @@
 module.exports = {
   apps: {
+    'admin-web': {
+      port: 3002,
+    },
     'ws-server': {
       wsport: 3001,
       httpport: 3000,

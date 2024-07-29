@@ -1,0 +1,13 @@
+include template
+
+table(border=1)
+  each user of users
+    tr
+      td= user.key
+      td= user.uniqId
+      td= user.ip
+      td= user.dateConnected
+      td 
+        a(href="/users/send/key/" + user.key) отправить by key
+      td
+        a(href="/users/send/uniqId/" + user.uniqId) отправить by uniqId

@@ -4,7 +4,7 @@ class Friend extends EventEmitter {
   constructor({key, socket, ip, onMessage = null}) {
     super();
     this.key = key;
-    this.uniqId = Math.random();
+    this.uniqId = '' + Math.random();
     this.socket = socket;
     this.dateConnected = Date.now();
     this.ip = ip;

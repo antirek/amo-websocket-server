@@ -1,8 +1,10 @@
 const {WebSocketServer} = require('ws');
 const {createServer} = require('http');
 
+const {Friend} = require('./RoomManager');
+const roomName = 'ROOM';
 
-const createWebsocketServer = (connections) => {
+const createWebsocketServer = (roomManager) => {
   const server = createServer();
   const wss = new WebSocketServer({server});
 
@@ -14,7 +16,7 @@ const createWebsocketServer = (connections) => {
       console.log('e', e);
     }
 
-    const jobData = {
+    const messageData = {
       key,
       uniqId,
       appId,
@@ -37,7 +39,8 @@ const createWebsocketServer = (connections) => {
       return;
     }
 
-    console.log(`join ${key}`);    
+    roomManager.joinFriendToRoom(roomName, new Friend({key, socket: ws, ip, onMessage}));
+    console.log(`join ${key}`);
   }
 
   wss.on('connection', onConnection);

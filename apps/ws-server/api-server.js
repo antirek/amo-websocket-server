@@ -3,8 +3,9 @@ const cors = require('cors');
 const {customAlphabet} = require('nanoid');
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
+const roomName = 'ROOM';
 
-const createExpressApp = (connections) => {
+const createExpressApp = (roomManager) => {
   const app = express();
   app.use(cors());
   app.use(express.json());
@@ -13,10 +14,10 @@ const createExpressApp = (connections) => {
     try {
       console.log('/send by key');
       const ref = nanoid();
-      const {roomName, key, appId} = req.params;
+      const {key} = req.params;
       const data = req.body;
-      console.log({roomName, key, appId, data, ref});
-      const room = roomManager.getRoomByName(roomName, appId);
+      console.log({roomName, key, data, ref});
+      const room = roomManager.getRoomByName(roomName);
       console.log({room});
       room.sendToFriends(key, JSON.stringify({...data, ref}));
       res.json({status: 'OK'});
@@ -26,14 +27,14 @@ const createExpressApp = (connections) => {
     }
   });
 
-  app.post('/send/:appId/:roomName/uniqId/:uniqId', async (req, res) => {
+  app.post('/send/uniqId/:uniqId', async (req, res) => {
     try {
       console.log('/send by uniqId');
       const ref = nanoid();
-      const {roomName, uniqId, appId} = req.params;
+      const {uniqId} = req.params;
       const data = req.body;
-      console.log({roomName, uniqId, appId, data, ref});
-      const room = roomManager.getRoomByName(roomName, appId);
+      console.log({roomName, uniqId, data, ref});
+      const room = roomManager.getRoomByName(roomName);
       console.log({room});
       room.sendToFriend(uniqId, JSON.stringify({...data, ref}));
       res.json({status: 'OK'});
@@ -46,6 +47,8 @@ const createExpressApp = (connections) => {
   app.get('/list', async (req, res) => {
     try {
       console.log('/list');
+      const room = roomManager.getRoomByName(roomName);
+      const friends = room.getFriends();
       console.log({friends});
       res.json(friends);
     } catch (e) {

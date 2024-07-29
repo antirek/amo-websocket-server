@@ -49,7 +49,7 @@ const createExpressApp = (roomManager) => {
       console.log('/list');
       const room = roomManager.getRoomByName(roomName);
       const friends = room.getFriends();
-      console.log({friends});
+      console.table(friends);
       res.json(friends);
     } catch (e) {
       console.log('e', e);

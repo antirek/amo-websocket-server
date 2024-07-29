@@ -2,6 +2,8 @@ const {WebSocketServer} = require('ws');
 const {createServer} = require('http');
 
 const {Friend} = require('./RoomManager');
+const {Message} = require('../../models');
+
 const roomName = 'ROOM';
 
 const createWebsocketServer = (roomManager) => {
@@ -9,6 +11,7 @@ const createWebsocketServer = (roomManager) => {
   const wss = new WebSocketServer({server});
 
   const onMessage = async ({key, uniqId, data}) => {
+    console.log('ttt', data);
     let message;
     try {
       message = JSON.parse(Buffer.from(data));
@@ -19,10 +22,12 @@ const createWebsocketServer = (roomManager) => {
     const messageData = {
       key,
       uniqId,
-      appId,
       message,
       timestamp: Date.now(),
     };
+
+    await Message.create(messageData)
+    console.log('message saved');
   };
 
   function onConnection(ws, req) {
